@@ -32,8 +32,38 @@ also includes a simple web dashboard built with Flask.
 
 ##  Project Structure
 
-weather-analyzer/ │ ├── app/ │ ├── services/ │ ├── api/ │ ├──
-repository/ │ └── models/ │ ├── data/ │ └── weather.csv │ ├── main.py
+weather-analyzer/
+│
+├── app/                       
+│   │
+│   ├── api/                    
+│   │   └── weather_api.py
+│   │
+│   ├── models/                
+│   │   └── weather_model.py
+│   │
+│   ├── repository/          
+│   │   └── weather_repo.py
+│   │
+│   ├── services/               
+│   │   ├── weather_service.py      
+│   │   ├── analysis_service.py     
+│   │   ├── prediction_service.py     
+│   │   └── visualization_service.py 
+│   │
+│   └── config.py              
+│
+├── data/                     
+│   └── weather.csv
+│
+├── images/                     
+│   ├── dashboard.png
+│   ├── Temperature.png
+│   └── Humidity.png
+│
+├── main.py                  
+│
+└── README.md               
 
 
 ------------------------------------------------------------------------
@@ -43,13 +73,15 @@ repository/ │ └── models/ │ ├── data/ │ └── weather.csv 
 
 ###  Dashboard UI
 
-![Dashboard](image-3.png)
-
+![alt text](images/dashboard.png)
 ###  Temperature Graph
-![Temperature graph](image-4.png)
 
+![alt text](images/Temperature.png)
 ###  Humidity Graph
-![Humidity graph](image-5.png)
+
+![alt text](images/Humidity.png)
+
+
 
 
 
