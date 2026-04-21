@@ -58,8 +58,8 @@ weather-analyzer/
 │
 ├── images/                     
 │   ├── dashboard.png
-│   ├── Temperature.png
-│   └── Humidity.png
+│   ├── image.jpg
+│  
 │
 ├── main.py                  
 │
@@ -74,12 +74,10 @@ weather-analyzer/
 ###  Dashboard UI
 
 ![alt text](images/dashboard.png)
-###  Temperature Graph
+### Weather analyze Dashboard
 
-![alt text](images/Temperature.png)
-###  Humidity Graph
+![alt text](images/image.JPG)
 
-![alt text](images/Humidity.png)
 
 
 

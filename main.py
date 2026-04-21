@@ -2,7 +2,7 @@ from flask import Flask, request
 from app.services.weather_service import collect_weather
 from app.services.analysis_service import analyze
 from app.services.prediction_service import predict
-from app.services.visualization_service import get_graphs
+from app.services.visualization_service import WeatherVisualizer
 
 app = Flask(__name__)
 
@@ -12,26 +12,36 @@ def home():
     analysis = {}
     prediction = None
     city = ""
-    temp_graph = hum_graph = None
+    graph = None
+    show_dashboard = False
 
     if request.method == "POST":
         city = request.form.get("city")
 
         if city:
+            # Collect data
             temp, humidity = collect_weather(city)
+
+            # Analysis + prediction
             analysis = analyze()
             prediction = predict()
-            temp_graph, hum_graph = get_graphs()
+
+            # Visualization (CLASS BASED)
+            viz = WeatherVisualizer("data/weather.csv")
+            graph = viz.plot_combined_graph()
+
+            show_dashboard = True
 
     return f"""
     <html>
     <head>
-        <title>Weather Dashboard</title>
+        <title>Weather App</title>
         <style>
             body {{
                 font-family: Arial;
                 background-color: #f4f6f8;
                 text-align: center;
+                padding-top: 50px;
             }}
             .card {{
                 background: white;
@@ -53,7 +63,7 @@ def home():
                 cursor: pointer;
             }}
             img {{
-                width: 80%;
+                width: 90%;
                 margin-top: 10px;
             }}
         </style>
@@ -61,41 +71,36 @@ def home():
 
     <body>
 
-        <h1>🌦️ Weather Dashboard</h1>
-
         <form method="POST">
             <input type="text" name="city" placeholder="Enter city" value="{city}">
             <button type="submit">Get Weather</button>
         </form>
 
+        {f'''
         <div class="card">
             <h3>Current Weather</h3>
-            <p>Temperature: {temp if temp else '-'}</p>
-            <p>Humidity: {humidity if humidity else '-'}</p>
+            <p>Temperature: {temp}</p>
+            <p>Humidity: {humidity}</p>
         </div>
 
         <div class="card">
             <h3>Analysis</h3>
-            <p>Average Temp: {analysis.get('avg_temp', '-')}</p>
-            <p>Max Temp: {analysis.get('max_temp', '-')}</p>
-            <p>Latest Temp: {analysis.get('latest_temp', '-')}</p>
-            <p>Trend: {analysis.get('trend', '-')}</p>
+            <p>Average Temp: {analysis.get('avg_temp')}</p>
+            <p>Max Temp: {analysis.get('max_temp')}</p>
+            <p>Latest Temp: {analysis.get('latest_temp')}</p>
+            <p>Trend: {analysis.get('trend')}</p>
         </div>
 
         <div class="card">
             <h3>Prediction</h3>
-            <p>Next Temperature: {prediction if prediction else '-'}</p>
+            <p>Next Temperature: {prediction}</p>
         </div>
 
         <div class="card">
-            <h3>Temperature Graph</h3>
-            {f'<img src="data:image/png;base64,{temp_graph}"/>' if temp_graph else '<p>No data</p>'}
+            <h3>Weather Visualization</h3>
+            <img src="data:image/png;base64,{graph}">
         </div>
-
-        <div class="card">
-            <h3>Humidity Graph</h3>
-            {f'<img src="data:image/png;base64,{hum_graph}"/>' if hum_graph else '<p>No data</p>'}
-        </div>
+        ''' if show_dashboard else ""}
 
     </body>
     </html>
